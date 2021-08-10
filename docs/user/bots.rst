@@ -2350,6 +2350,34 @@ Documentation about IDEA: https://idea.cesnet.cz/en/index
 * `test_mode`: add `Test` category to mark all outgoing IDEA events as informal (meant to simplify setting up and debugging new IDEA producers) (default: `true`)
 
 
+.. _intelmq.bots.experts.jinja.expert:
+
+Jinja2 Template Expert
+^^^^^^^^^^^^^^^^^^^^^^
+
+This bot lets you modify the content of your IntelMQ message fields using Jinja2 templates.
+
+Documentation about JINJA templating language: https://jinja.palletsprojects.com/en/2.11.x/
+At the moment only Jinja2 is supported.
+
+**Information**
+
+* `name:` intelmq.bots.experts.jinja.expert
+* `description:` Modify the content of IntelMQ messages using jinja2 templates
+
+**Configuration Parameters**
+
+* `fields`: a dict containing as key the field of which the result of the Jinja2 template should be written to and as value either a Jinja2 template or a filepath to a Jinja2 template file (starting with ``file:///``).
+  The object containing the existing message will be passed to the Jinja2 template with the name ``msg``.
+
+  .. code-block:: yaml
+
+     fields:
+       output: The provider is {{ msg['feed.provider'] }}!
+       feed.url: "{{ msg['feed.url'] | upper }}"
+       extra.somejinjaoutput: file:///etc/intelmq/somejinjatemplate.j2
+
+
 .. _intelmq.bots.experts.lookyloo.expert:
 
 Lookyloo
