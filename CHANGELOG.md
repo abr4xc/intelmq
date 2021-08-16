@@ -13,12 +13,17 @@ CHANGELOG
 
 ### Core
 - `intelmq.lib.bot.SQLBot` was replaced by an SQLMixin in `intelmq.lib.mixins.SQLMixin`. The Generic DB Lookup Expert bot and the SQLOutput bot were updated accordingly.
+- Added an ExpertBot class - it should be used by all expert bots as a parent class
+- Introduced a module for IntelMQ related datatypes `intelmq.lib.datatypes` which for now only contains an Enum listing the four bot types
+- Added a `bottype` attribute to CollectorBot, ParserBot, ExpertBot, OutputBot
 
 ### Development
 
 ### Data Format
 
 ### Bots
+- Set the parent class of all bots to the correct bot class
+
 #### Collectors
 
 #### Parsers
