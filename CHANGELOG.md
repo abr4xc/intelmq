@@ -12,6 +12,7 @@ CHANGELOG
 ### Configuration
 
 ### Core
+- `intelmq.lib.bot.SQLBot` was replaced by an SQLMixin in `intelmq.lib.mixins.SQLMixin`. The Generic DB Lookup Expert bot and the SQLOutput bot were updated accordingly.
 
 ### Development
 
