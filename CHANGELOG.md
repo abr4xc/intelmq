@@ -12,6 +12,8 @@ CHANGELOG
 ### Configuration
 
 ### Core
+- `intelmq.lib.bot`:
+  - Enhance behaviour if an unconfigured bot is started (PR#2054 by Sebastian Wagner).
 
 ### Development
 

@@ -42,6 +42,9 @@ from intelmq.lib.pipeline import PipelineFactory, Pipeline
 from intelmq.lib.utils import RewindableFileHandle, base64_decode
 
 __all__ = ['Bot', 'CollectorBot', 'ParserBot', 'SQLBot', 'OutputBot']
+ALLOWED_SYSTEM_PARAMETERS = {'enabled', 'run_mode', 'group', 'description', 'module', 'name'}
+# The first two keys are only used by the IntelMQ Manager and can be ignored, the last just contains the runtime parameters and is handled separately
+IGNORED_SYSTEM_PARAMETERS = {'groupname', 'bot_id', 'parameters'}
 
 
 class Bot(object):
@@ -53,6 +56,8 @@ class Bot(object):
     # Bot is capable of SIGHUP delaying
     _sighup_delay: bool = True
     # From the runtime configuration
+    enabled: bool = True
+    run_mode: str = "continuous"
     description: Optional[str] = None
     group: Optional[str] = None
     module = None
@@ -752,16 +757,21 @@ class Bot(object):
 
         if self.__bot_id in config:
             params = config[self.__bot_id]
-            self.run_mode = params.get('run_mode', 'continuous')
-            self.name = params.get('name')
-            self.description = params.get('description')
-            self.group = params.get('group')
-            self.module = params.get('module')
+            for option, value in params.items():
+                if option in ALLOWED_SYSTEM_PARAMETERS and value:
+                    self.__log_configuration_parameter("system", option, value)
+                    setattr(self, option, value)
+                elif option not in IGNORED_SYSTEM_PARAMETERS:
+                    self.logger.warning('Ignoring disallowed system parameter %r.',
+                                        option)
             for option, value in params.get('parameters', {}).items():
                 setattr(self, option, value)
                 self.__log_configuration_parameter("runtime", option, value)
                 if option.startswith('logging_'):
                     reinitialize_logging = True
+        else:
+            self.logger.warning('Bot ID %r not found in runtime configuration - could not load any parameters.',
+                                self.__bot_id)
 
         intelmq_environment = [elem for elem in os.environ if elem.startswith('INTELMQ_')]
         for elem in intelmq_environment:
@@ -777,6 +787,9 @@ class Bot(object):
 
             setattr(self, option, value)
             self.__log_configuration_parameter("environment", option, value)
+
+            if option.startswith('logging_'):
+                reinitialize_logging = True
 
         if reinitialize_logging:
             self.logger.handlers = []  # remove all existing handlers
