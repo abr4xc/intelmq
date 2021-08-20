@@ -12,6 +12,8 @@ CHANGELOG
 ### Configuration
 
 ### Core
+- `intelmq.lib.message`:
+  - Fix and pre-compile the regular expression for harmonization key names (PR#2059 by Sebastian Wagner, fixes #1807).
 
 ### Development
 
