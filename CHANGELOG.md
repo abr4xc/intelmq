@@ -13,7 +13,7 @@ CHANGELOG
 
 ### Core
 - `intelmq.lib.message`:
-  - Fix and pre-compile the regular expression for harmonization key names (PR#2059 by Sebastian Wagner, fixes #1807).
+  - Fix and pre-compile the regular expression for harmonization key names and also check keys in the `extra.` namespace (PR#2059 by Sebastian Wagner, fixes #1807).
 
 ### Development
 
